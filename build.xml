@@ -6,11 +6,32 @@
 		<mkdir dir="${basedir}/build/out"/>
 	</target>
 
-	<target name="clean" description="Removes old build files">
-		<delete dir="${basedir}/build/"/>
+	<property name="libsdir" location="${basedir}/libs"/>
+	<target name="get_libs" description="Get jackson library">
+		<mkdir dir="${libsdir}"/>
+		<exec executable="wget">
+			<arg value="http://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.1.1/jackson-annotations-2.1.1.jar"/>
+			<arg value="-O"/>
+			<arg value="${libsdir}/jackson-annotations-2.1.1.jar"/>
+		</exec>
+		<exec executable="wget">
+			<arg value="http://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.1.1/jackson-core-2.1.1.jar"/>
+			<arg value="-O"/>
+			<arg value="${libsdir}/jackson-core-2.1.1.jar"/>
+		</exec>
+		<exec executable="wget">
+			<arg value="http://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.1.1/jackson-databind-2.1.1.jar"/>
+			<arg value="-O"/>
+			<arg value="${libsdir}/jackson-databind-2.1.1.jar"/>
+		</exec>
 	</target>
 
-	<target name="build" depends="clean, init" description="Compiles all classes">
+	<target name="clean" description="Removes old build files">
+		<delete dir="${basedir}/build/"/>
+		<delete dir="${libsdir}"/>
+	</target>
+
+	<target name="build" depends="clean, init, get_libs" description="Compiles all classes">
 		<javac
 			destdir="${basedir}/build/out"
 			source="1.6"
